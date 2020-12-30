@@ -165,6 +165,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
+
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     var count = 0
     val a = sqrt(n + 0.0)
@@ -190,6 +191,10 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
+fun main() {
+    println("resault = ${collatzSteps(1)}")
+}
+
 fun collatzSteps(x: Int): Int {
     var a = x
     var count = 0
@@ -201,7 +206,6 @@ fun collatzSteps(x: Int): Int {
 }
 
 
-
 /**
  * Средняя
  *
@@ -211,21 +215,23 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
+
+
 fun sin(x: Double, eps: Double): Double {
     var n = 1
-    var a = x
-    var sin = x
-    var b = x
-    var c = 1
-    while (abs(sin) > eps) {
-        b = -b * x * x
-        c *= (n + 1) * (n + 2)
+    var p = x
+    var s = x
+    var count = 0
+    while (abs(p) > eps) {
+        p = -p * x.pow(2) / factorial(n)
+        s += p
         n += 2
-        sin = b / c
-        a += sin
+        count++
     }
-    return a
+    println("count = $count")
+    return s
 }
+
 
 /**
  * Средняя
@@ -236,7 +242,22 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+
+
+fun cos(x: Double, eps: Double): Double {
+    var n = 2
+    var p = 1.0
+    var c = x
+    var count = 0
+    while (abs(p) > eps) {
+        p = -p * x.pow(2) / factorial(n)
+        c += p
+        n += 2
+        count++
+    }
+    println("count = $count")
+    return c
+}
 
 /**
  * Средняя
@@ -257,7 +278,6 @@ fun revert(n: Int): Int {
     }
     return revers
 }
-
 
 
 /**
@@ -288,11 +308,11 @@ fun hasDifferentDigits(n: Int): Boolean {
     var b = a % 10
     a /= 10
     var resault = false
-    while (a>0){
-        if (a%10 != b){
+    while (a > 0) {
+        if (a % 10 != b) {
             resault = true
             break
-        }else{
+        } else {
             b = a % 10
             a /= 10
             resault = false
@@ -311,26 +331,32 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 
+
 fun squareSequenceDigit(n: Int): Int {
     var a = 0
     var b = 0
     var count = 0
-    for (i in 1..n){
-        a = i * i
-        when {
-            a<10 -> count++
-            a>=10 && a<100 -> count += 2
-            a>=100 && a<1000 -> count += 3
-            else -> count += 4
+
+    for (i in 1..n) {
+        var countA = 0
+        a = i*i
+        while (a != 0) {
+            a /= 10
+            countA++
         }
-        if (count>=n) break
+        count += countA
+        if (count >= n) {
+            a = i * i
+            b =  i
+            break
+        }
     }
-    if (count==n) b = a%10
+    if (count == n) b = a % 10
     else {
         while (count > n) {
             count--
             a /= 10
-            b = a%10
+            b = a % 10
         }
     }
     return b
@@ -345,29 +371,31 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun main() {
-    println("fibSequenceDigit = ${fibSequenceDigit(20)}")
-}
+
 fun fibSequenceDigit(n: Int): Int {
     var a = 0
     var b = 0
     var count = 0
-    for (i in 1..n){
+    for (i in 1..n) {
+        var countA = 0
         a = fib(i)
-        when {
-            a<10 -> count++
-            a>=10 && a<100 -> count += 2
-            a>=100 && a<1000 -> count += 3
-            else -> count += 4
+        while (a != 0) {
+            a /= 10
+            countA++
         }
-        if (count>=n) break
+        count += countA
+        if (count >= n) {
+            a = fib(i)
+            b =  i
+            break
+        }
     }
-    if (count==n) b = a%10
+    if (count == n) b = a % 10
     else {
         while (count > n) {
             count--
             a /= 10
-            b = a%10
+            b = a % 10
         }
     }
     return b
